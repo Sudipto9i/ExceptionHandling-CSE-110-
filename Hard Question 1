@@ -1,0 +1,108 @@
+1. Develop a banking system for a company that manages savings and current accounts.
+
+a. Create an abstract class called BankAccount.
+
+b. Inside the BankAccount class:
+
+Declare a constant MIN_BALANCE = 500.
+
+Declare the following abstract methods:
+
+void deposit(double amount) – deposits money into the account.
+
+void withdraw(double amount) – withdraws money from the account.
+
+c. Create two concrete classes SavingsAccount and CurrentAccount that extend BankAccount.
+
+d. Each class should:
+
+Maintain account number, holder name, and balance.
+
+Implement the methods.
+
+If withdrawal makes the balance go below MIN_BALANCE, then throw a custom exception InsufficientBalanceException.
+
+e. In the main method:
+
+Create objects of SavingsAccount and CurrentAccount.
+
+Perform deposits and withdrawals.
+
+Use try-catch to handle exceptions and print meaningful error messages.
+
+class InsufficientBalanceException extends Exception{
+	public InsufficientBalanceException(String message){
+		super(message);
+	}
+}
+abstract class BankAccount{
+	protected String number ;
+	protected String name;
+	protected double balance;
+	public BankAccount(String number , String name , double balance){
+		this.number=number;
+		this.name = name ;
+		this.balance=balance;
+	}
+	public static final double MIN_BALANCE = 500 ;
+	public abstract void deposit(double amount);
+	public abstract void withdraw(double amount) throws InsufficientBalanceException;
+	public void displayDetails(){
+		System.out.println("Äccount Holder : "+number);
+		System.out.println("Name : "+name);
+		System.out.println("Balance : "+balance);
+	}
+}
+class SavingsAccount extends BankAccount{
+	public SavingsAccount(String number , String name , double balance){
+		super(number,name,balance);
+	}
+	public void deposit(double amount){
+		balance+=amount;
+		System.out.println("Deposited "+balance+" into Current Account .");
+	}
+	public void withdraw(double amount)throws InsufficientBalanceException{
+		if(balance-amount<MIN_BALANCE){
+			throw new InsufficientBalanceException("Your savings account doesn't contain minimum balance.");
+		}
+		balance -= amount ;
+		System.out.println("Your Current Balance : "+balance);
+	}
+}
+class CurrentAccount extends BankAccount{
+	public CurrentAccount(String number , String name , double balance){
+		super(number,name,balance);
+	}
+	public void deposit(double amount){
+		balance+=amount;
+		System.out.println("Deposited "+balance+" into Current Account .");
+	}
+	public void withdraw(double amount)throws InsufficientBalanceException{
+		if(balance-amount<MIN_BALANCE){
+			throw new InsufficientBalanceException("Your current account doesn't contain minimum balance.");
+		}
+		balance -= amount ;
+		System.out.println("Your Current Balance : "+balance
+		);
+	}
+}
+public class F2{
+	public static void main(String[]args){
+		SavingsAccount sa= new SavingsAccount("SQ700","BOB", 2000.0);
+		CurrentAccount ca = new CurrentAccount("SQ8","GOB",1200.0);
+		try{
+			sa.deposit(200.0);
+			sa.withdraw(1789.76);
+		}
+		catch(InsufficientBalanceException e){
+			System.out.println("Exception in SavingsAccount : "+e.getMessage());
+		}
+		try{
+			ca.deposit(500.0);
+			ca.withdraw(1130.76);
+		}
+		catch(InsufficientBalanceException e){
+			System.out.println("Exception in CurrentAccount : "+e.getMessage());
+		}
+	}
+}
